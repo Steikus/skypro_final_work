@@ -50,9 +50,14 @@ class MainPage:
         actions.move_to_element(end_selector).click().perform()
         self.__driver.find_element(By.CSS_SELECTOR, "button[data-testid='search-button']").click()
 
+    def get_hotel_adress(self):
+        WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.zen-hotelcard-content-main")))
+        adresses = self.__driver.find_elements(By.CSS_SELECTOR, "p.zen-hotelcard-address.link")
+        return adresses[0].text
+
     def search_results_city(self):
         WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.zenregioninfo")))
-        region_info = self.__driver.find_element(By.CSS_SELECTOR, "div.zenregioninfo").text
+        region_info = self.__driver.find_element(By.CSS_SELECTOR, "p.link.zenregioninfo-region").text
         return region_info
 
     def get_to_hotel_by_title(self, num: int):
@@ -78,6 +83,11 @@ class MainPage:
         name = self.__driver.find_element(By.CSS_SELECTOR, "h1.zen-roomspage-title-name")
         return name.text
 
+    def get_hotel_adess_from_page(self):
+        WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "span.zenroomspagelocation-address.link")))
+        adress = self.__driver.find_element(By.CSS_SELECTOR, "span.zenroomspagelocation-address.link").text
+        return adress
+
     def add_to_favorite_page(self):
         self.__driver.find_element(By.CSS_SELECTOR, "div.link.zen-roomspage-header-icons-favorite").click()
 
@@ -99,12 +109,12 @@ class MainPage:
         header = self.__driver.find_element(By.CSS_SELECTOR, "div.zenfavorite-header").text
         return header
 
-    def get_price_go_check(self, num: int):
-        WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.zenroomspage-b2c-rates-deal")))
+    def get_price_go_check(self):
+        WebDriverWait(self.__driver, 10).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "div.zen-roomspage-calltoaction-roomtypes-price-wrapper")))
         prices = self.__driver.find_elements(By.CSS_SELECTOR, "div.zenroomspage-b2c-rates-price-amount")
         book_buttons = self.__driver.find_elements(By.CSS_SELECTOR, "a[class^='zenroomspage-b2c-rates-book']")
-        price_to_check = prices[num].text
-        book_buttons[num].click()
+        price_to_check = prices[0].text
+        book_buttons[0].click()
         return price_to_check
 
     def reserve_page_get_price(self):

@@ -1,4 +1,4 @@
-from skypro_final_work.methods.MainPage import MainPage
+from MainPage import MainPage
 from selenium import webdriver
 import pytest
 import allure
@@ -80,8 +80,7 @@ def test_add_hotel_to_favorite(driver: MainPage):
 
 
 @allure.id("UI-5")
-@allure.title("Добавление отеля в избранное")
-@allure.description("Стоимость отеля на странице отелей совпадает со стоимостью в корзине")
+@allure.title("Проверка адреса отеля со страницы поиска и со страницы отеля")
 def test_check_price(driver: MainPage):
     with allure.step("Указать данные для поиска отеля"):
         city = "Москва"
@@ -89,10 +88,10 @@ def test_check_price(driver: MainPage):
         data_out = "Aug 29 2024"
     with allure.step("Запустить поиск отелей по критериям"):
         driver.searching_for_hotel(city, data_in, data_out)
+    with allure.step("Получить адрес отеля со страницы поиска"):
+        adress = driver.get_hotel_adress()
     with allure.step("Перейти на страницу отеля через кнопку"):
         driver.get_to_hotel_by_button(0)
-    with allure.step("Получить информации о стоимости на странице отеля"):
-        price_on_page = driver.get_price_go_check(0)
-    with allure.step("Получить информацию о стоимости на странице бронирования"):
-        price_of_reserve = driver.reserve_page_get_price()
-    assert price_on_page == price_of_reserve
+    with allure.step("Получение адреса отеля со страницы информации об отеле"):
+        page_adress = driver.get_hotel_adess_from_page()
+    assert adress == page_adress
